@@ -14,16 +14,16 @@ object CommonSettings extends AutoPlugin {
       organizationName := "Super Flat",
       startYear := Some(2020),
       organizationHomepage := Some(url("https://superflat.io/")),
-      homepage := Some(url("https://github.com/super-flat/scala-opentelemetry-tools")),
-      scmInfo := Some(ScmInfo(url("https://github.com/super-flat/scala-opentelemetry-tools"),
-        "git@github.com:super-flat/scala-opentelemetry-tools.git")),
+      homepage := Some(url("https://github.com/super-flat/scala-otel-tools")),
+      scmInfo := Some(ScmInfo(url("https://github.com/super-flat/scala-otel-tools"),
+        "git@github.com:super-flat/scala-otel-tools.git")),
       licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
       developers += Developer(
         "contributors",
         "Contributors",
         "",
-        url("https://github.com/super-flat/scala-opentelemetry-tools/graphs/contributors")),
-      description := "scala-opentelemetry-tools - Scala shared code for telemetry.\n")
+        url("https://github.com/super-flat/scala-otel-tools/graphs/contributors")),
+      description := "scala-otel-tools - Scala shared code for telemetry.\n")
 
   override def projectSettings =
     Seq(

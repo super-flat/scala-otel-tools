@@ -86,9 +86,9 @@ class StatusClientInterceptorSpec extends BaseSpec {
       // awaits for the child span
       await()
         .atMost(10, TimeUnit.SECONDS)
-        .until(() => testExporter.getFinishedSpanItems
-          .asScala
-          .exists(_.getParentSpanId == span.getSpanContext.getSpanId)
+        .until(() =>
+          testExporter.getFinishedSpanItems.asScala
+            .exists(_.getParentSpanId == span.getSpanContext.getSpanId)
         )
 
       val spans: List[SpanData] = testExporter.getFinishedSpanItems.asScala.toList

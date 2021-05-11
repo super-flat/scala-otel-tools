@@ -5,19 +5,22 @@ lazy val root: Project = project
   .aggregate(otel_tools, proto_test)
   .enablePlugins(CommonSettings)
   .enablePlugins(NoPublish)
-  .settings(name := "scala-opentelemetry-tools")
+  .disablePlugins(Publish)
+  .settings(name := "scala-otel-tools")
 
 lazy val otel_tools: Project = project
-  .in(file("code/opentelemetry-tools"))
+  .in(file("code/otel-tools"))
   .dependsOn(proto_test % "test->compile")
   .enablePlugins(BuildSettings)
   .enablePlugins(Publish)
-  .settings(name := "opentelemetry-tools")
+  .disablePlugins(NoPublish)
+  .settings(name := "otel-tools")
 
 lazy val proto_test: Project = project
   .in(file("code/.proto"))
   .enablePlugins(BuildSettings)
   .enablePlugins(NoPublish)
+  .disablePlugins(Publish)
   .settings(
     name := "protogen",
       Compile / PB.protoSources ++= Seq(file("proto")),
