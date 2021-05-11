@@ -15,7 +15,8 @@ object CommonSettings extends AutoPlugin {
       startYear := Some(2020),
       organizationHomepage := Some(url("https://superflat.io/")),
       homepage := Some(url("https://github.com/super-flat/scala-opentelemetry-tools")),
-      scmInfo := Some(ScmInfo(url("https://github.com/super-flat/scala-opentelemetry-tools"), "git@github.com:super-flat/scala-opentelemetry-tools.git")),
+      scmInfo := Some(ScmInfo(url("https://github.com/super-flat/scala-opentelemetry-tools"),
+        "git@github.com:super-flat/scala-opentelemetry-tools.git")),
       licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
       developers += Developer(
         "contributors",

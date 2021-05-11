@@ -30,27 +30,15 @@ jobs:
       - name: Earthly Version
         run: earthly --version
 
-      - name: Create Version
-        id: version
-        run: |
-          # TODO: find a better way to version from tags
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # set to output var
-          echo ::set-output name=VERSION::${VERSION}
-
       - name: Build
+        env:
+          FORCE_COLOR: 1
+        run: earthly --ci --push +test-all
+
+      - name: Publish
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          EARTHLY_SECRETS: "PGP_PASSPHRASE,PGP_SECRET,SONATYPE_PASSWORD,SONATYPE_USERNAME"
-          EARTHLY_BUILD_ARGS: "BRANCH_NAME,COMMIT_HASH,VERSION,GITHUB_REF"
-          FORCE_COLOR: 1
-          COMMIT_HASH: ${{ github.sha }}
-          VERSION: ${{ steps.version.outputs.VERSION }}
-          GITHUB_REF: ${{ github.ref }}
-        run: earthly --ci --push +all
+        run: sbt ci-release
