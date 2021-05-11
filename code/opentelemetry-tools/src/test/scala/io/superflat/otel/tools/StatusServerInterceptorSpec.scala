@@ -75,8 +75,8 @@ class StatusServerInterceptorSpec extends BaseSpec {
 
       response.isFailure shouldBe true
 
-      Await.ready(Future(testExporter.getFinishedSpanItems.size() >= 2), Duration.apply(10, TimeUnit.SECONDS))
       testExporter.flush()
+      Await.ready(Future(testExporter.getFinishedSpanItems.size() >= 2), Duration.apply(10, TimeUnit.SECONDS))
 
       val spans: java.util.List[SpanData] = testExporter.getFinishedSpanItems
       spans.size() shouldBe 2
