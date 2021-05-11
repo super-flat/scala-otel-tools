@@ -29,6 +29,8 @@ object Dependencies {
 
     val TestContainers: String = "0.39.3"
 
+    val AwaitilityVersion: String = "4.1.0"
+
     // The version used to build sbt plugin.
     val TargetSbt1 = "1.3.13"
   }
@@ -57,6 +59,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion,
     "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion,
     "io.grpc" % "grpc-testing" % grpcJavaVersion % Test,
-    "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test
+    "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
+    "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test
   )
 }

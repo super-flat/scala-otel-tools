@@ -16,11 +16,11 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.superflat.otel.mixins.BaseSpec
 import io.superflat.otel.tools.helloworld.{GreeterGrpc, HelloReply, HelloRequest}
 import io.superflat.otel.tools.helloworld.GreeterGrpc.Greeter
+import org.awaitility.Awaitility.await
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.Try
 
@@ -82,11 +82,21 @@ class StatusClientInterceptorSpec extends BaseSpec {
       response.isFailure shouldBe true
 
       testExporter.flush()
-      Await.ready(Future(testExporter.getFinishedSpanItems.size() >= 2), Duration(10, TimeUnit.SECONDS))
+
+      // awaits for the child span
+      await()
+        .atMost(10, TimeUnit.SECONDS)
+        .until(() => testExporter.getFinishedSpanItems
+          .asScala
+          .exists(_.getParentSpanId == span.getSpanContext.getSpanId)
+        )
 
       val spans: List[SpanData] = testExporter.getFinishedSpanItems.asScala.toList
 
-      val attributeData: Attributes = spans.find(_.getAttributes.size > 0).map(_.getAttributes).get
+      val attributeData: Attributes = spans
+        .find(_.getParentSpanId == span.getSpanContext.getSpanId)
+        .map(_.getAttributes)
+        .get
       attributeData.get(AttributeKey.stringKey("grpc.kind")) shouldBe "client"
       attributeData.get(AttributeKey.stringKey("grpc.status_code")) shouldBe errStatus.getCode.name()
       attributeData.get(AttributeKey.stringKey("grpc.ok")) shouldBe "false"

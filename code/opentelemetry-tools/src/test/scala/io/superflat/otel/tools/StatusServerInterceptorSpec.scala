@@ -17,10 +17,8 @@ import io.superflat.otel.mixins.BaseSpec
 import io.superflat.otel.tools.helloworld.{GreeterGrpc, HelloReply, HelloRequest}
 import io.superflat.otel.tools.helloworld.GreeterGrpc.Greeter
 
-import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.util.Try
 
 class StatusServerInterceptorSpec extends BaseSpec {
@@ -76,7 +74,6 @@ class StatusServerInterceptorSpec extends BaseSpec {
       response.isFailure shouldBe true
 
       testExporter.flush()
-      Await.ready(Future(testExporter.getFinishedSpanItems.size() >= 2), Duration.apply(10, TimeUnit.SECONDS))
 
       val spans: java.util.List[SpanData] = testExporter.getFinishedSpanItems
       spans.size() shouldBe 2
