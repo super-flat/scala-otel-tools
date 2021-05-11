@@ -1,3 +1,5 @@
+import scalapb.compiler.Version.scalapbVersion
+
 test / parallelExecution := true
 
 lazy val root: Project = project
@@ -22,6 +24,10 @@ lazy val proto_test: Project = project
   .enablePlugins(NoPublish)
   .disablePlugins(Publish)
   .settings(
+    libraryDependencies ++= Seq(
+      // scalapb
+      "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"
+    ),
     name := "protogen",
       Compile / PB.protoSources ++= Seq(file("proto")),
       Compile / PB.includePaths ++= Seq(file("proto/test")),
