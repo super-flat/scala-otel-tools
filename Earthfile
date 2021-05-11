@@ -53,36 +53,33 @@ sbt:
     RUN apt-get update
     RUN apt-get install -y docker-ce docker-ce-cli containerd.io
 
-code:
+dependencies:
     # copy relevant files in, save as a base image
     FROM +sbt
 
     # create user & working dir for sbt
     ARG BUILD_DIR="/build"
-    ARG BUILD_USR="builder"
 
     USER root
 
     RUN mkdir $BUILD_DIR && \
-        chmod 777 /$BUILD_DIR && \
-        useradd -s /bin/bash -d $BUILD_DIR $BUILD_USR && \
-        chown -R $BUILD_USR:root $BUILD_DIR
+        chmod 777 /$BUILD_DIR
 
     WORKDIR $BUILD_DIR
-    USER $BUILD_USR
 
     # copy configurations
     COPY .scalafmt.conf build.sbt .
-    COPY -dir project .
+    COPY --dir project .
 
     # clean & install dependencies
     RUN sbt clean cleanFiles update
 
-    # copy proto definitions
-    COPY -dir proto .
-
+code:
+    FROM +dependencies
+    # copy proto definitions & generate
+    COPY --dir proto .
     # copy code
-    COPY -dir code .
+    COPY --dir code .
 
 test-all:
     FROM +code
