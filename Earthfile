@@ -89,6 +89,8 @@ test-all:
     RUN sbt coverage test coverageReport
 
 publish:
+    FROM +code
+
     RUN --push \
         --secret PGP_PASSPHRASE=+secrets/PGP_PASSPHRASE \
         --secret PGP_SECRET=+secrets/PGP_SECRET \
