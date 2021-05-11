@@ -89,4 +89,9 @@ test-all:
     RUN sbt coverage test coverageReport
 
 publish:
-    RUN --push sbt ci-release
+    RUN --push \
+    --secret PGP_PASSPHRASE=+secrets/PGP_PASSPHRASE \
+    --secret PGP_SECRET=+secrets/PGP_SECRET \
+    --secret SONATYPE_PASSWORD=+secrets/SONATYPE_PASSWORD \
+    --secret SONATYPE_USERNAME=+secrets/SONATYPE_USERNAME \
+    sbt ci-release
