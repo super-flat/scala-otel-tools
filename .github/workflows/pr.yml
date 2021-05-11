@@ -1,0 +1,24 @@
+# .github/workflows/branch.yml
+
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: nelonoel/branch-name@v1.0.1
+
+      - name: Download latest earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.11/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+
+      - name: Earthly Version
+        run: earthly --version
+
+      - name: Build
+        env:
+          FORCE_COLOR: 1
+        run: earthly --ci --push +test-all
