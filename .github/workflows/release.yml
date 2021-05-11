@@ -1,0 +1,55 @@
+# .github/workflows/release.yml
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: nelonoel/branch-name@v1.0.1
+
+      - name: Docker Login
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USER }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: docker login --username "$DOCKERHUB_USERNAME" --password "$DOCKERHUB_TOKEN"
+
+      - name: Download latest earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.11/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+
+      - name: Earthly Version
+        run: earthly --version
+
+      - name: Create Version
+        id: version
+        run: |
+          # TODO: find a better way to version from tags
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # set to output var
+          echo ::set-output name=VERSION::${VERSION}
+
+      - name: Build
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          EARTHLY_SECRETS: "PGP_PASSPHRASE,PGP_SECRET,SONATYPE_PASSWORD,SONATYPE_USERNAME"
+          EARTHLY_BUILD_ARGS: "BRANCH_NAME,COMMIT_HASH,VERSION"
+          FORCE_COLOR: 1
+          COMMIT_HASH: ${{ github.sha }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: earthly --ci --push +all
