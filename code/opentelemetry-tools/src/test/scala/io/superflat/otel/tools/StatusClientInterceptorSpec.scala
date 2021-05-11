@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.Try
 
 class StatusClientInterceptorSpec extends BaseSpec {
@@ -75,18 +76,17 @@ class StatusClientInterceptorSpec extends BaseSpec {
 
       val response: Try[HelloReply] = Try(stub.sayHello(HelloRequest("foo")))
 
-      span.end()
       scope.close()
+      span.end()
 
       response.isFailure shouldBe true
 
       Await.ready(Future(testExporter.getFinishedSpanItems.size() >= 2), Duration(10, TimeUnit.SECONDS))
       testExporter.flush()
 
-      val spans: java.util.List[SpanData] = testExporter.getFinishedSpanItems
+      val spans: List[SpanData] = testExporter.getFinishedSpanItems.asScala.toList
 
-      spans.size() shouldBe 2
-      val attributeData: Attributes = spans.get(0).getAttributes
+      val attributeData: Attributes = spans.find(_.getAttributes.size > 0).map(_.getAttributes).get
       attributeData.get(AttributeKey.stringKey("grpc.kind")) shouldBe "client"
       attributeData.get(AttributeKey.stringKey("grpc.status_code")) shouldBe errStatus.getCode.name()
       attributeData.get(AttributeKey.stringKey("grpc.ok")) shouldBe "false"
