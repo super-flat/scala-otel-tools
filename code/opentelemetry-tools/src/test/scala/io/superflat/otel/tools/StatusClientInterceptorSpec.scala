@@ -75,8 +75,8 @@ class StatusClientInterceptorSpec extends BaseSpec {
 
       val response: Try[HelloReply] = Try(stub.sayHello(HelloRequest("foo")))
 
-      scope.close()
       span.end()
+      scope.close()
 
       response.isFailure shouldBe true
 
