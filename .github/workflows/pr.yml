@@ -6,13 +6,10 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-
+      - uses: actions/checkout@v2.3.4
       - uses: nelonoel/branch-name@v1.0.1
 
       - name: Download latest earthly
@@ -23,7 +20,5 @@ jobs:
 
       - name: Build
         env:
-          COMMIT_HASH: ${{ github.sha }}
-          EARTHLY_BUILD_ARGS: "BRANCH_NAME,COMMIT_HASH"
           FORCE_COLOR: 1
-        run: earthly --ci +test-all
+        run: earthly --ci --push +test-all
