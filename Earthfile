@@ -91,6 +91,9 @@ test-all:
 publish:
     FROM +code
 
+    ARG VERSION=dev
+    ARG GITHUB_REF=""
+
     RUN --push \
         --secret PGP_PASSPHRASE=+secrets/PGP_PASSPHRASE \
         --secret PGP_SECRET=+secrets/PGP_SECRET \

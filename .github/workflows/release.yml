@@ -48,8 +48,9 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           EARTHLY_SECRETS: "PGP_PASSPHRASE,PGP_SECRET,SONATYPE_PASSWORD,SONATYPE_USERNAME"
-          EARTHLY_BUILD_ARGS: "BRANCH_NAME,COMMIT_HASH,VERSION"
+          EARTHLY_BUILD_ARGS: "BRANCH_NAME,COMMIT_HASH,VERSION,GITHUB_REF"
           FORCE_COLOR: 1
           COMMIT_HASH: ${{ github.sha }}
           VERSION: ${{ steps.version.outputs.VERSION }}
+          GITHUB_REF: ${{ github.ref }}
         run: earthly --ci --push +all
