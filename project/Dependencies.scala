@@ -45,16 +45,14 @@ object Dependencies {
     "io.opentelemetry.instrumentation" % "opentelemetry-grpc-1.5" % OpenTelemetryGRPCVersion,
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
-    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC)
+    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC),
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion
   )
 
   /**
    * Test dependencies
    */
   val TestJars: Seq[ModuleID] = Seq(
-    // scalapb
-    "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf",
-    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion,
     // general
     "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion,
     "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion,
