@@ -9,7 +9,7 @@ import java.lang
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
-private[otel] object TracingHelpers {
+object TracingHelpers {
 
   final val log: Logger = LoggerFactory.getLogger(getClass)
 
