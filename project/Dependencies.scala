@@ -41,8 +41,8 @@ object Dependencies {
    */
   val TestJars: Seq[ModuleID] = Seq(
     // general
-    "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion,
-    "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion,
+    "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion % Test,
+    "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion % Test,
     "io.grpc" % "grpc-testing" % grpcJavaVersion % Test,
     "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
     "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test
