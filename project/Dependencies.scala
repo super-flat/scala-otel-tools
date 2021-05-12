@@ -21,7 +21,7 @@ object Dependencies {
 
     val SbtProtocVersion = "1.0.2"
 
-    val OpenTelemetryVersion: String = "1.0.1"
+    val OpenTelemetryVersion: String = "1.2.0"
     val OpenTelemetryGRPCVersion: String = "1.0.1-alpha"
     val OpenTelemetryMetricsVersion: String = "1.0.1-alpha"
 
