@@ -12,27 +12,14 @@ object Dependencies {
    */
   object Versions {
     val Scala213 = "2.13.5"
-    val Scala212 = "2.12.13"
     val ScalaTestVersion = "3.2.8"
     val ScalaMockVersion = "5.1.0"
-    val SilencerVersion = "1.7.3"
-
-    val ScalapbCompilerVersion: String = scalapbVersion
-
-    val SbtProtocVersion = "1.0.2"
 
     val OpenTelemetryVersion: String = "1.0.1"
     val OpenTelemetryGRPCVersion: String = "1.0.1-alpha"
     val OpenTelemetryMetricsVersion: String = "1.0.1-alpha"
 
-    val JavaAgentVersion = "0.1.6"
-
-    val TestContainers: String = "0.39.3"
-
     val AwaitilityVersion: String = "4.1.0"
-
-    // The version used to build sbt plugin.
-    val TargetSbt1 = "1.3.13"
   }
 
   import Dependencies.Versions._
