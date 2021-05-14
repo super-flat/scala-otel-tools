@@ -12,7 +12,7 @@ object Dependencies {
    */
   object Versions {
     val Scala213 = "2.13.5"
-    val ScalaTestVersion = "3.2.8"
+    val ScalaTestVersion = "3.2.9"
     val ScalaMockVersion = "5.1.0"
 
     val OpenTelemetryVersion: String = "1.0.1"
