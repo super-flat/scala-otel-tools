@@ -10,7 +10,7 @@ object Dependencies {
    * Versions number
    */
   object Versions {
-    val GrpcJavaVersion = "1.37.0"
+    val GrpcJavaVersion = "1.37.1"
     val ScalaPbVersion = "0.11.3"
 
     val Scala213 = "2.13.5"
