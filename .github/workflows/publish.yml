@@ -32,8 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
-
-      - uses: nelonoel/branch-name@v1.0.1
+        with:
+          fetch-depth: 0
+      - uses: olafurpg/setup-scala@v10
 
       - name: Publish
         env:
