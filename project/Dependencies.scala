@@ -1,3 +1,4 @@
+import coursier.core.Configuration.provided
 import sbt.{Test, _}
 import scalapb.compiler.Version.{grpcJavaVersion, scalapbVersion}
 
@@ -33,7 +34,7 @@ object Dependencies {
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC),
-    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion % provided
   )
 
   /**
