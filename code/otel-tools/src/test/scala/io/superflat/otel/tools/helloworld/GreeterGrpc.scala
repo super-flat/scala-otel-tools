@@ -1,71 +1,49 @@
 package io.superflat.otel.tools.helloworld
 
+import io.grpc.{CallOptions, Channel, MethodDescriptor, ServerServiceDefinition, ServiceDescriptor}
+import io.grpc.stub.{AbstractStub, ClientCalls, ServerCalls, StreamObserver}
+
+import scala.concurrent.{ExecutionContext, Future}
+
 object GreeterGrpc {
-  val METHOD_SAY_HELLO: _root_.io.grpc.MethodDescriptor[io.superflat.otel.tools.helloworld.HelloRequest,
-                                                        io.superflat.otel.tools.helloworld.HelloReply
-  ] =
-    _root_.io.grpc.MethodDescriptor
+  val METHOD_SAY_HELLO: MethodDescriptor[HelloRequest, HelloReply] =
+    MethodDescriptor
       .newBuilder()
-      .setType(_root_.io.grpc.MethodDescriptor.MethodType.UNARY)
-      .setFullMethodName(_root_.io.grpc.MethodDescriptor.generateFullMethodName("helloworld.Greeter", "SayHello"))
+      .setType(MethodDescriptor.MethodType.UNARY)
+      .setFullMethodName(MethodDescriptor.generateFullMethodName("helloworld.Greeter", "SayHello"))
       .setSampledToLocalTracing(true)
-      .setRequestMarshaller(_root_.scalapb.grpc.Marshaller.forMessage[io.superflat.otel.tools.helloworld.HelloRequest])
-      .setResponseMarshaller(_root_.scalapb.grpc.Marshaller.forMessage[io.superflat.otel.tools.helloworld.HelloReply])
-      .setSchemaDescriptor(
-        _root_.scalapb.grpc.ConcreteProtoMethodDescriptorSupplier.fromMethodDescriptor(
-          io.superflat.otel.tools.helloworld.HelloworldProto.javaDescriptor.getServices().get(0).getMethods().get(0)
-        )
-      )
+      .setRequestMarshaller(HelloRequest)
+      .setResponseMarshaller(HelloReply)
       .build()
 
-  val SERVICE: _root_.io.grpc.ServiceDescriptor =
-    _root_.io.grpc.ServiceDescriptor
-      .newBuilder("helloworld.Greeter")
-      .setSchemaDescriptor(
-        new _root_.scalapb.grpc.ConcreteProtoFileDescriptorSupplier(
-          io.superflat.otel.tools.helloworld.HelloworldProto.javaDescriptor
-        )
-      )
-      .addMethod(METHOD_SAY_HELLO)
-      .build()
+  val SERVICE: ServiceDescriptor = ServiceDescriptor
+    .newBuilder("helloworld.Greeter")
+    .addMethod(METHOD_SAY_HELLO)
+    .build()
 
   /**
    * The greeting service definition.
    */
-  trait Greeter extends _root_.scalapb.grpc.AbstractService {
-    override def serviceCompanion = Greeter
+  trait Greeter {
 
     /**
      * Sends a greeting
      */
-    def sayHello(
-      request: io.superflat.otel.tools.helloworld.HelloRequest
-    ): scala.concurrent.Future[io.superflat.otel.tools.helloworld.HelloReply]
+    def sayHello(request: HelloRequest): scala.concurrent.Future[HelloReply]
   }
 
-  object Greeter extends _root_.scalapb.grpc.ServiceCompanion[Greeter] {
-    implicit def serviceCompanion: _root_.scalapb.grpc.ServiceCompanion[Greeter] = this
-    def javaDescriptor: _root_.com.google.protobuf.Descriptors.ServiceDescriptor =
-      io.superflat.otel.tools.helloworld.HelloworldProto.javaDescriptor.getServices().get(0)
-    def scalaDescriptor: _root_.scalapb.descriptors.ServiceDescriptor =
-      io.superflat.otel.tools.helloworld.HelloworldProto.scalaDescriptor.services(0)
+  object Greeter {
     def bindService(serviceImpl: Greeter,
                     executionContext: scala.concurrent.ExecutionContext
-    ): _root_.io.grpc.ServerServiceDefinition =
-      _root_.io.grpc.ServerServiceDefinition
+    ): ServerServiceDefinition =
+      ServerServiceDefinition
         .builder(SERVICE)
         .addMethod(
           METHOD_SAY_HELLO,
-          _root_.io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new _root_.io.grpc.stub.ServerCalls.UnaryMethod[io.superflat.otel.tools.helloworld.HelloRequest,
-                                                            io.superflat.otel.tools.helloworld.HelloReply
-            ] {
-              override def invoke(
-                request: io.superflat.otel.tools.helloworld.HelloRequest,
-                observer: _root_.io.grpc.stub.StreamObserver[io.superflat.otel.tools.helloworld.HelloReply]
-              ): _root_.scala.Unit =
-                serviceImpl.sayHello(request).onComplete(scalapb.grpc.Grpc.completeObserver(observer))(executionContext)
-            }
+          ServerCalls.asyncUnaryCall((request: HelloRequest, observer: StreamObserver[HelloReply]) =>
+            serviceImpl
+              .sayHello(request)
+              .onComplete(GrpcHelpers.completeObserver(observer))(executionContext)
           )
         )
         .build()
@@ -75,61 +53,47 @@ object GreeterGrpc {
    * The greeting service definition.
    */
   trait GreeterBlockingClient {
-    def serviceCompanion = Greeter
 
     /**
      * Sends a greeting
      */
-    def sayHello(
-      request: io.superflat.otel.tools.helloworld.HelloRequest
-    ): io.superflat.otel.tools.helloworld.HelloReply
+    def sayHello(request: HelloRequest): HelloReply
   }
 
-  class GreeterBlockingStub(channel: _root_.io.grpc.Channel,
-                            options: _root_.io.grpc.CallOptions = _root_.io.grpc.CallOptions.DEFAULT
-  ) extends _root_.io.grpc.stub.AbstractStub[GreeterBlockingStub](channel, options)
+  class GreeterBlockingStub(channel: Channel, options: CallOptions = CallOptions.DEFAULT)
+      extends AbstractStub[GreeterBlockingStub](channel, options)
       with GreeterBlockingClient {
 
     /**
      * Sends a greeting
      */
-    override def sayHello(
-      request: io.superflat.otel.tools.helloworld.HelloRequest
-    ): io.superflat.otel.tools.helloworld.HelloReply = {
-      _root_.scalapb.grpc.ClientCalls.blockingUnaryCall(channel, METHOD_SAY_HELLO, options, request)
+    override def sayHello(request: HelloRequest): HelloReply = {
+      ClientCalls.blockingUnaryCall(channel, METHOD_SAY_HELLO, options, request)
     }
 
-    override def build(channel: _root_.io.grpc.Channel, options: _root_.io.grpc.CallOptions): GreeterBlockingStub =
+    override def build(channel: Channel, options: CallOptions): GreeterBlockingStub =
       new GreeterBlockingStub(channel, options)
   }
 
-  class GreeterStub(channel: _root_.io.grpc.Channel,
-                    options: _root_.io.grpc.CallOptions = _root_.io.grpc.CallOptions.DEFAULT
-  ) extends _root_.io.grpc.stub.AbstractStub[GreeterStub](channel, options)
+  class GreeterStub(channel: Channel, options: CallOptions = CallOptions.DEFAULT)
+      extends AbstractStub[GreeterStub](channel, options)
       with Greeter {
 
     /**
      * Sends a greeting
      */
-    override def sayHello(
-      request: io.superflat.otel.tools.helloworld.HelloRequest
-    ): scala.concurrent.Future[io.superflat.otel.tools.helloworld.HelloReply] = {
-      _root_.scalapb.grpc.ClientCalls.asyncUnaryCall(channel, METHOD_SAY_HELLO, options, request)
+    override def sayHello(request: HelloRequest): Future[HelloReply] = {
+      GrpcHelpers.guavaFuture2ScalaFuture(
+        ClientCalls.futureUnaryCall(channel.newCall(METHOD_SAY_HELLO, options), request)
+      )
     }
 
-    override def build(channel: _root_.io.grpc.Channel, options: _root_.io.grpc.CallOptions): GreeterStub =
+    override def build(channel: Channel, options: CallOptions): GreeterStub =
       new GreeterStub(channel, options)
   }
 
-  def bindService(serviceImpl: Greeter,
-                  executionContext: scala.concurrent.ExecutionContext
-  ): _root_.io.grpc.ServerServiceDefinition = Greeter.bindService(serviceImpl, executionContext)
+  def bindService(serviceImpl: Greeter, executionContext: ExecutionContext): ServerServiceDefinition =
+    Greeter.bindService(serviceImpl, executionContext)
 
-  def blockingStub(channel: _root_.io.grpc.Channel): GreeterBlockingStub = new GreeterBlockingStub(channel)
-
-  def stub(channel: _root_.io.grpc.Channel): GreeterStub = new GreeterStub(channel)
-
-  def javaDescriptor: _root_.com.google.protobuf.Descriptors.ServiceDescriptor =
-    io.superflat.otel.tools.helloworld.HelloworldProto.javaDescriptor.getServices().get(0)
-
+  def blockingStub(channel: Channel): GreeterBlockingStub = new GreeterBlockingStub(channel)
 }

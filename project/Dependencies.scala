@@ -11,7 +11,6 @@ object Dependencies {
    */
   object Versions {
     val GrpcJavaVersion = "1.37.0"
-    val ScalaPbVersion = "0.11.3"
 
     val Scala213 = "2.13.5"
     val ScalaTestVersion = "3.2.9"
@@ -45,8 +44,6 @@ object Dependencies {
   val TestJars: Seq[ModuleID] = Seq(
     // gRPC
     "io.grpc" % "grpc-testing" % GrpcJavaVersion % Test,
-    // Protobuf
-    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % ScalaPbVersion % Test,
     // Opentelemetry
     "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
     // general
