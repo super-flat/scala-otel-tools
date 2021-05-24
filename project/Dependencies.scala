@@ -13,7 +13,7 @@ object Dependencies {
     val GrpcJavaVersion = "1.37.0"
     val ScalaPbVersion = "0.11.3"
 
-    val Scala213 = "2.13.5"
+    val Scala213 = "2.13.6"
     val ScalaTestVersion = "3.2.9"
     val ScalaMockVersion = "5.1.0"
 
