@@ -29,7 +29,7 @@ object Dependencies {
 
   val Jars = Seq(
     // gRPC
-    "io.grpc" % "grpc-core" % GrpcJavaVersion % "provided",
+    "io.grpc" % "grpc-stub" % GrpcJavaVersion % "provided",
     // Opentelemetry
     "io.opentelemetry" % "opentelemetry-api" % OpenTelemetryVersion,
     "io.opentelemetry" % "opentelemetry-sdk" % OpenTelemetryVersion,
@@ -43,12 +43,15 @@ object Dependencies {
    * Test dependencies
    */
   val TestJars: Seq[ModuleID] = Seq(
+    // gRPC
+    "io.grpc" % "grpc-testing" % GrpcJavaVersion % Test,
+    // Protobuf
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % ScalaPbVersion % Test,
+    // Opentelemetry
+    "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
     // general
     "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion % Test,
     "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion % Test,
-    "io.grpc" % "grpc-testing" % GrpcJavaVersion % Test,
-    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % ScalaPbVersion % Test,
-    "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
     "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test
   )
 }

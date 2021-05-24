@@ -4,9 +4,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13/badge.svg)]((https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13))
 [![Snapshot Artifacts][Badge-SonatypeSnapshots]][Link-SonatypeSnapshots]
 
-## Dependencies
-- ScalaPB 
-
 ## Features
 
 - GrpcHeadersInterceptor
