@@ -1,4 +1,5 @@
 import sbt.{Test, _}
+import scalapb.compiler.Version.{grpcJavaVersion, scalapbVersion}
 
 /**
  * Holds the list of dependencies used in the project and their various version
@@ -10,12 +11,12 @@ object Dependencies {
    * Versions number
    */
   object Versions {
-    val GrpcJavaVersion = "1.37.0"
-    val ScalaPbVersion = "0.11.3"
+    val GrpcJavaVersion: String = grpcJavaVersion
+    val ScalaPbVersion: String = scalapbVersion
 
-    val Scala213 = "2.13.5"
-    val ScalaTestVersion = "3.2.9"
-    val ScalaMockVersion = "5.1.0"
+    val Scala213: String = "2.13.5"
+    val ScalaTestVersion: String = "3.2.9"
+    val ScalaMockVersion: String = "5.1.0"
 
     val OpenTelemetryVersion: String = "1.2.0"
     val OpenTelemetryGRPCVersion: String = "1.0.1-alpha"
