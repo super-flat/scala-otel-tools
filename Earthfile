@@ -76,8 +76,6 @@ dependencies:
 
 code:
     FROM +dependencies
-    # copy proto definitions & generate
-    COPY --dir proto .
     # copy code
     COPY --dir code .
 

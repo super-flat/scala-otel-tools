@@ -1,5 +1,4 @@
 import sbt.{Test, _}
-import scalapb.compiler.Version.{grpcJavaVersion, scalapbVersion}
 
 /**
  * Holds the list of dependencies used in the project and their various version
@@ -11,6 +10,9 @@ object Dependencies {
    * Versions number
    */
   object Versions {
+    val GrpcJavaVersion = "1.37.0"
+    val ScalaPbVersion = "0.11.3"
+
     val Scala213 = "2.13.5"
     val ScalaTestVersion = "3.2.9"
     val ScalaMockVersion = "5.1.0"
@@ -26,14 +28,15 @@ object Dependencies {
   val excludeGRPC = ExclusionRule(organization = "io.grpc")
 
   val Jars = Seq(
+    // gRPC
+    "io.grpc" % "grpc-core" % GrpcJavaVersion % "provided",
     // Opentelemetry
     "io.opentelemetry" % "opentelemetry-api" % OpenTelemetryVersion,
     "io.opentelemetry" % "opentelemetry-sdk" % OpenTelemetryVersion,
     "io.opentelemetry.instrumentation" % "opentelemetry-grpc-1.5" % OpenTelemetryGRPCVersion,
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
-    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC),
-    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion % "provided"
+    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC)
   )
 
   /**
@@ -43,7 +46,8 @@ object Dependencies {
     // general
     "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion % Test,
     "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion % Test,
-    "io.grpc" % "grpc-testing" % grpcJavaVersion % Test,
+    "io.grpc" % "grpc-testing" % GrpcJavaVersion % Test,
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % ScalaPbVersion % Test,
     "io.opentelemetry" % "opentelemetry-sdk-testing" % OpenTelemetryVersion % Test,
     "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test
   )
