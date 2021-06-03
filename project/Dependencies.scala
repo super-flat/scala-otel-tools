@@ -14,7 +14,7 @@ object Dependencies {
     val GrpcJavaVersion: String = grpcJavaVersion
     val ScalaPbVersion: String = scalapbVersion
 
-    val Scala213: String = "2.13.5"
+    val Scala213: String = "2.13.6"
     val ScalaTestVersion: String = "3.2.9"
     val ScalaMockVersion: String = "5.1.0"
 
