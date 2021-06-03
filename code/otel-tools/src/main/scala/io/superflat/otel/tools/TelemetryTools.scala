@@ -5,7 +5,7 @@ import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
 import io.opentelemetry.sdk.metrics.`export`.IntervalMetricReader
-import io.opentelemetry.sdk.{OpenTelemetrySdk, OpenTelemetrySdkBuilder}
+import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.metrics.SdkMeterProvider
 import io.opentelemetry.sdk.resources.Resource
 import io.opentelemetry.sdk.trace.SdkTracerProvider
@@ -18,22 +18,19 @@ case class TelemetryTools(telemetryConfig: TelemetryConfig) {
 
   /**
    * Create an open telemetry SDK and configure it to instrument the service for trace and metrics collection.
-   * @return a OTEL sdk builder instance with reasonable settings
+   * @return a OTEL sdk instance with reasonable settings
    */
-  def start(): OpenTelemetrySdkBuilder = {
+  def start(): OpenTelemetrySdk = {
     val propagators: ContextPropagators = PropagatorConfig.configurePropagators(telemetryConfig)
-
     val resource = configureResource()
-
     configureMetricsExporter(resource)
-
     val tracerProvider: Option[SdkTracerProvider] = configureProvider(resource)
-
     val sdkBuilder = OpenTelemetrySdk.builder().setPropagators(propagators)
-
     tracerProvider.map(sdkBuilder.setTracerProvider)
 
-    sdkBuilder
+    val sdk: OpenTelemetrySdk = sdkBuilder.build()
+
+    sdk
   }
 
   /**
