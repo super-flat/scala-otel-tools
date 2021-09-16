@@ -1,6 +1,6 @@
 package io.superflat.otel.tools.helpers
 
-import io.grpc.{ManagedChannel, Metadata}
+import io.grpc.{ ManagedChannel, Metadata }
 
 import java.io.Closeable
 import java.util.concurrent.TimeUnit
@@ -10,12 +10,9 @@ object GrpcHelpers {
 
   def getHeaders(headers: (String, String)*): Metadata = {
     val metadata: Metadata = new Metadata()
-    headers.foreach({ case (k, v) =>
-      metadata.put(
-        Metadata.Key.of(k, Metadata.ASCII_STRING_MARSHALLER),
-        v
-      )
-    })
+    headers.foreach { case (k, v) =>
+      metadata.put(Metadata.Key.of(k, Metadata.ASCII_STRING_MARSHALLER), v)
+    }
     metadata
   }
 

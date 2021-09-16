@@ -2,8 +2,8 @@ package io.superflat.otel.tools
 
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator
-import io.opentelemetry.context.propagation.{ContextPropagators, TextMapPropagator}
-import io.opentelemetry.extension.trace.propagation.{B3Propagator, JaegerPropagator, OtTracePropagator}
+import io.opentelemetry.context.propagation.{ ContextPropagators, TextMapPropagator }
+import io.opentelemetry.extension.trace.propagation.{ B3Propagator, JaegerPropagator, OtTracePropagator }
 import io.superflat.otel.mixins.BaseSpec
 
 class PropagatorConfigSpec extends BaseSpec {

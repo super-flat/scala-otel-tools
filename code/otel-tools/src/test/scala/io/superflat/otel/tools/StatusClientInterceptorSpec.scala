@@ -1,9 +1,9 @@
 package io.superflat.otel.tools
 
-import io.grpc.{ManagedChannel, ServerServiceDefinition, Status}
-import io.grpc.inprocess.{InProcessChannelBuilder, InProcessServerBuilder}
+import io.grpc.{ ManagedChannel, ServerServiceDefinition, Status }
+import io.grpc.inprocess.{ InProcessChannelBuilder, InProcessServerBuilder }
 import io.opentelemetry.api.OpenTelemetry
-import io.opentelemetry.api.common.{AttributeKey, Attributes}
+import io.opentelemetry.api.common.{ AttributeKey, Attributes }
 import io.opentelemetry.api.trace.Span
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator
 import io.opentelemetry.context.propagation.ContextPropagators
@@ -14,7 +14,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.superflat.otel.mixins.BaseSpec
-import io.superflat.otel.tools.helloworld.{GreeterGrpc, HelloReply, HelloRequest}
+import io.superflat.otel.tools.helloworld.{ GreeterGrpc, HelloReply, HelloRequest }
 import io.superflat.otel.tools.helloworld.GreeterGrpc.Greeter
 import org.awaitility.Awaitility.await
 
@@ -49,8 +49,7 @@ class StatusClientInterceptorSpec extends BaseSpec {
       val service: ServerServiceDefinition = Greeter.bindService(serviceImpl, global)
 
       closeables.register(
-        InProcessServerBuilder.forName(serverName).directExecutor().addService(service).build().start()
-      )
+        InProcessServerBuilder.forName(serverName).directExecutor().addService(service).build().start())
 
       // create generic opentelemetry gRPC interceptor
       val grpcInterceptor = GrpcTracing.create(openTelemetry).newClientInterceptor()
@@ -87,16 +86,12 @@ class StatusClientInterceptorSpec extends BaseSpec {
       await()
         .atMost(10, TimeUnit.SECONDS)
         .until(() =>
-          testExporter.getFinishedSpanItems.asScala
-            .exists(_.getParentSpanId == span.getSpanContext.getSpanId)
-        )
+          testExporter.getFinishedSpanItems.asScala.exists(_.getParentSpanId == span.getSpanContext.getSpanId))
 
       val spans: List[SpanData] = testExporter.getFinishedSpanItems.asScala.toList
 
-      val attributeData: Attributes = spans
-        .find(_.getParentSpanId == span.getSpanContext.getSpanId)
-        .map(_.getAttributes)
-        .get
+      val attributeData: Attributes =
+        spans.find(_.getParentSpanId == span.getSpanContext.getSpanId).map(_.getAttributes).get
       attributeData.get(AttributeKey.stringKey("grpc.kind")) shouldBe "client"
       attributeData.get(AttributeKey.stringKey("grpc.status_code")) shouldBe errStatus.getCode.name()
       attributeData.get(AttributeKey.stringKey("grpc.ok")) shouldBe "false"

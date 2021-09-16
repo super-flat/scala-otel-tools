@@ -1,6 +1,6 @@
 package io.superflat.otel.tools
 
-import io.opentelemetry.api.common.{Attributes, AttributesBuilder}
+import io.opentelemetry.api.common.{ Attributes, AttributesBuilder }
 import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter

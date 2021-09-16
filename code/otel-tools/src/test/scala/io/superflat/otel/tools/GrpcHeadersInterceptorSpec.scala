@@ -1,11 +1,11 @@
 package io.superflat.otel.tools
 
-import io.grpc.{ManagedChannel, Metadata, ServerServiceDefinition}
-import io.grpc.inprocess.{InProcessChannelBuilder, InProcessServerBuilder}
+import io.grpc.{ ManagedChannel, Metadata, ServerServiceDefinition }
+import io.grpc.inprocess.{ InProcessChannelBuilder, InProcessServerBuilder }
 import io.grpc.stub.MetadataUtils
 import io.superflat.otel.mixins.BaseSpec
-import io.superflat.otel.tools.helloworld.GreeterGrpc.{Greeter, GreeterBlockingStub}
-import io.superflat.otel.tools.helloworld.{GreeterGrpc, HelloReply, HelloRequest}
+import io.superflat.otel.tools.helloworld.GreeterGrpc.{ Greeter, GreeterBlockingStub }
+import io.superflat.otel.tools.helloworld.{ GreeterGrpc, HelloReply, HelloRequest }
 import io.superflat.otel.tools.helpers.GrpcHelpers
 
 import scala.concurrent.ExecutionContext.global
@@ -44,8 +44,7 @@ class GrpcHeadersInterceptorSpec extends BaseSpec {
           .addService(service)
           .intercept(GrpcHeadersInterceptor)
           .build()
-          .start()
-      )
+          .start())
 
       val channel: ManagedChannel =
         closeables.register(InProcessChannelBuilder.forName(serverName).directExecutor().build())

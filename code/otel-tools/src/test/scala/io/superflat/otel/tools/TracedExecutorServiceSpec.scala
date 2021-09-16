@@ -1,14 +1,14 @@
 package io.superflat.otel.tools
 
 import io.opentelemetry.api.OpenTelemetry
-import io.opentelemetry.api.trace.{Span, Tracer}
+import io.opentelemetry.api.trace.{ Span, Tracer }
 import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.extension.trace.propagation.B3Propagator
 import io.opentelemetry.sdk.OpenTelemetrySdk
 
 import java.util.concurrent.Executors
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
+import scala.concurrent.{ ExecutionContext, ExecutionContextExecutor, Future }
 import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.SdkTracerProvider

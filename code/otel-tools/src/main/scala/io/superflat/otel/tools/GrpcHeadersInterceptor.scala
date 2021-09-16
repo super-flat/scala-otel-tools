@@ -1,6 +1,6 @@
 package io.superflat.otel.tools
 
-import io.grpc.{Context, Contexts, Metadata, ServerCall, ServerCallHandler, ServerInterceptor}
+import io.grpc.{ Context, Contexts, Metadata, ServerCall, ServerCallHandler, ServerInterceptor }
 
 /**
  * Intercepts gRPC headers and propagate them downstream via the gRPC context
@@ -19,10 +19,10 @@ object GrpcHeadersInterceptor extends ServerInterceptor {
    * @tparam RespT the type of the response
    * @return
    */
-  override def interceptCall[ReqT, RespT](call: ServerCall[ReqT, RespT],
-                                          headers: Metadata,
-                                          next: ServerCallHandler[ReqT, RespT]
-  ): ServerCall.Listener[ReqT] = {
+  override def interceptCall[ReqT, RespT](
+      call: ServerCall[ReqT, RespT],
+      headers: Metadata,
+      next: ServerCallHandler[ReqT, RespT]): ServerCall.Listener[ReqT] = {
 
     val context: Context = Context.current().withValue(REQUEST_META, headers)
     Contexts.interceptCall(context, call, headers, next)

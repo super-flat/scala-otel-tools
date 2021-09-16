@@ -1,7 +1,7 @@
 package io.superflat.otel.tools
 
-import io.opentelemetry.api.{GlobalOpenTelemetry, OpenTelemetry}
-import io.opentelemetry.api.trace.{Span, Tracer}
+import io.opentelemetry.api.{ GlobalOpenTelemetry, OpenTelemetry }
+import io.opentelemetry.api.trace.{ Span, Tracer }
 import io.opentelemetry.context.Context
 import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.extension.trace.propagation.B3Propagator

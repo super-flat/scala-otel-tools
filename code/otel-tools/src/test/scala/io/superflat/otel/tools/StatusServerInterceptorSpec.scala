@@ -1,9 +1,9 @@
 package io.superflat.otel.tools
 
-import io.grpc.{ManagedChannel, ServerServiceDefinition, Status}
-import io.grpc.inprocess.{InProcessChannelBuilder, InProcessServerBuilder}
+import io.grpc.{ ManagedChannel, ServerServiceDefinition, Status }
+import io.grpc.inprocess.{ InProcessChannelBuilder, InProcessServerBuilder }
 import io.opentelemetry.api.OpenTelemetry
-import io.opentelemetry.api.common.{AttributeKey, Attributes}
+import io.opentelemetry.api.common.{ AttributeKey, Attributes }
 import io.opentelemetry.api.trace.Span
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator
 import io.opentelemetry.context.propagation.ContextPropagators
@@ -14,7 +14,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.`export`.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.superflat.otel.mixins.BaseSpec
-import io.superflat.otel.tools.helloworld.{GreeterGrpc, HelloReply, HelloRequest}
+import io.superflat.otel.tools.helloworld.{ GreeterGrpc, HelloReply, HelloRequest }
 import io.superflat.otel.tools.helloworld.GreeterGrpc.Greeter
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,8 +52,7 @@ class StatusServerInterceptorSpec extends BaseSpec {
           .intercept(GrpcTracing.create(openTelemetry).newServerInterceptor())
           .intercept(statusInterceptor)
           .build()
-          .start()
-      )
+          .start())
 
       val channel: ManagedChannel =
         InProcessChannelBuilder.forName(serverName).directExecutor().build()
