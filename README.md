@@ -9,7 +9,7 @@
 - GrpcHeadersInterceptor
 - StatusClientInterceptor
 - StatusServerInterceptor
-- TracedExeuctorService
+- TracedExecutorService
 
 ## License
 
