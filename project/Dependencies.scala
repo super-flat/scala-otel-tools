@@ -1,5 +1,5 @@
-import sbt.{Test, _}
-import scalapb.compiler.Version.{grpcJavaVersion, scalapbVersion}
+import sbt.{ Test, _ }
+import scalapb.compiler.Version.{ grpcJavaVersion, scalapbVersion }
 
 /**
  * Holds the list of dependencies used in the project and their various version
@@ -37,8 +37,7 @@ object Dependencies {
     "io.opentelemetry.instrumentation" % "opentelemetry-grpc-1.5" % OpenTelemetryGRPCVersion,
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
-    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC)
-  )
+    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC))
 
   /**
    * Test dependencies
@@ -53,6 +52,5 @@ object Dependencies {
     // general
     "org.scalatest" %% "scalatest" % Versions.ScalaTestVersion % Test,
     "org.scalamock" %% "scalamock" % Versions.ScalaMockVersion % Test,
-    "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test
-  )
+    "org.awaitility" % "awaitility-scala" % AwaitilityVersion % Test)
 }

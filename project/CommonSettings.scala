@@ -15,8 +15,10 @@ object CommonSettings extends AutoPlugin {
       startYear := Some(2020),
       organizationHomepage := Some(url("https://superflat.io/")),
       homepage := Some(url("https://github.com/super-flat/scala-otel-tools")),
-      scmInfo := Some(ScmInfo(url("https://github.com/super-flat/scala-otel-tools"),
-        "git@github.com:super-flat/scala-otel-tools.git")),
+      scmInfo := Some(
+        ScmInfo(
+          url("https://github.com/super-flat/scala-otel-tools"),
+          "git@github.com:super-flat/scala-otel-tools.git")),
       licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
       developers += Developer(
         "contributors",
@@ -27,16 +29,11 @@ object CommonSettings extends AutoPlugin {
 
   override def projectSettings =
     Seq(
-      scalacOptions ++= Seq(
-        "-Xfatal-warnings",
-        "-deprecation",
-        "-Xlint"
-      ),
+      scalacOptions ++= Seq("-Xfatal-warnings", "-deprecation", "-Xlint"),
       resolvers ++= Seq(Resolver.jcenterRepo, Resolver.sonatypeRepo("public"), Resolver.sonatypeRepo("snapshots")),
       scalafmtOnCompile := true,
       // show full stack traces and test case durations
       Test / testOptions += Tests.Argument("-oDF"),
       Test / logBuffered := false,
-      Test / fork := true
-    )
+      Test / fork := true)
 }
