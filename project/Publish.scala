@@ -1,5 +1,5 @@
-import sbt.Keys.{publishArtifact, skip, _}
-import sbt.{plugins, AutoPlugin, _}
+import sbt.Keys.{ publishArtifact, skip, _ }
+import sbt.{ plugins, AutoPlugin, _ }
 
 /**
  * For projects that are not to be published.

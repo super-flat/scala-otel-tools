@@ -26,12 +26,10 @@ lazy val proto_test: Project = project
   .settings(
     libraryDependencies ++= Seq(
       // scalapb
-      "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"
-    ),
+      "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"),
     name := "protogen",
     Test / PB.protoSources ++= Seq(file("proto")),
     Test / PB.includePaths ++= Seq(file("proto/test")),
     Test / PB.targets := Seq(
-      scalapb.gen(flatPackage = false, javaConversions = false, grpc = true) -> (Test / sourceManaged).value / "scalapb"
-    )
-  )
+      scalapb
+        .gen(flatPackage = false, javaConversions = false, grpc = true) -> (Test / sourceManaged).value / "scalapb"))
