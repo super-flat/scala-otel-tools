@@ -20,7 +20,9 @@ object Dependencies {
 
     val OpenTelemetryVersion: String = "1.6.0"
     val OpenTelemetryGRPCVersion: String = "1.0.1-alpha"
-    val OpenTelemetryMetricsVersion: String = "1.0.1-alpha"
+    val OpenTelemetryProtoVersion: String = "1.6.0-alpha"
+    val OpenTelemetryMetricsVersion: String = "1.6.0-alpha"
+    val OpenTelemetryPrometheusVersion: String = "1.6.0-alpha"
 
     val AwaitilityVersion: String = "4.1.0"
   }
@@ -34,10 +36,13 @@ object Dependencies {
     // Opentelemetry
     "io.opentelemetry" % "opentelemetry-api" % OpenTelemetryVersion,
     "io.opentelemetry" % "opentelemetry-sdk" % OpenTelemetryVersion,
+    "io.opentelemetry" % "opentelemetry-exporter-prometheus" % OpenTelemetryPrometheusVersion,
+    "io.opentelemetry" % "opentelemetry-proto" % OpenTelemetryProtoVersion,
     "io.opentelemetry.instrumentation" % "opentelemetry-grpc-1.5" % OpenTelemetryGRPCVersion,
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
-    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC))
+    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC)
+  )
 
   /**
    * Test dependencies
