@@ -14,7 +14,7 @@ object Dependencies {
     val GrpcJavaVersion: String = grpcJavaVersion
     val ScalaPbVersion: String = scalapbVersion
 
-    val Scala213: String = "2.13.6"
+    val Scala213: String = "2.13.7"
     val ScalaTestVersion: String = "3.2.10"
     val ScalaMockVersion: String = "5.1.0"
 
@@ -41,8 +41,7 @@ object Dependencies {
     "io.opentelemetry.instrumentation" % "opentelemetry-grpc-1.5" % OpenTelemetryGRPCVersion,
     "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % OpenTelemetryVersion,
     ("io.opentelemetry" % "opentelemetry-exporter-otlp-trace" % OpenTelemetryVersion).excludeAll(excludeGRPC),
-    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC)
-  )
+    ("io.opentelemetry" % "opentelemetry-exporter-otlp-metrics" % OpenTelemetryMetricsVersion).excludeAll(excludeGRPC))
 
   /**
    * Test dependencies
