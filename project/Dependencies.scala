@@ -24,7 +24,7 @@ object Dependencies {
     val OpenTelemetryMetricsVersion: String = "1.6.0-alpha"
     val OpenTelemetryPrometheusVersion: String = "1.6.0-alpha"
 
-    val AwaitilityVersion: String = "4.1.0"
+    val AwaitilityVersion: String = "4.1.1"
   }
 
   import Dependencies.Versions._
