@@ -4,12 +4,20 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13/badge.svg)]((https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13))
 [![Snapshot Artifacts][Badge-SonatypeSnapshots]][Link-SonatypeSnapshots]
 
+## Overview
+Otel-tools is a set of open-telemetry gRPC interceptors libraries that can be used in any scala gRPC based project.
+
 ## Features
 
 - GrpcHeadersInterceptor
 - StatusClientInterceptor
 - StatusServerInterceptor
 - TracedExecutorService
+
+## Usage
+```scala
+libraryDependencies += "io.superflat" % "otel-tools_2.13" % "0.1.10"
+```
 
 ## License
 
