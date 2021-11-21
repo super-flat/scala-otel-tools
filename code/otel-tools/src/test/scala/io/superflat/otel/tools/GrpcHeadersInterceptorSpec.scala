@@ -55,7 +55,7 @@ class GrpcHeadersInterceptorSpec extends BaseSpec {
       val value = "value"
       val requestHeaders: Metadata = getHeaders((key, value))
 
-      MetadataUtils.attachHeaders(stub, requestHeaders).sayHello(HelloRequest("hi"))
+      stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(requestHeaders)).sayHello(HelloRequest("hi"))
 
       responseHeaders.isDefined shouldBe true
       GrpcHelpers.getStringHeader(responseHeaders.get, key) shouldBe value
