@@ -6,15 +6,15 @@ import io.grpc.ForwardingClientCallListener.SimpleForwardingClientCallListener
 import io.opentelemetry.api.trace.Span
 
 /**
- * gRPC client interceptor that adds the returned gRPC status code to the trace attributes
- */
+  * gRPC client interceptor that adds the returned gRPC status code to the trace attributes
+  */
 class StatusClientInterceptor extends ClientInterceptor {
   override def interceptCall[ReqT, RespT](
       method: MethodDescriptor[ReqT, RespT],
       callOptions: CallOptions,
-      next: Channel): ClientCall[ReqT, RespT] = {
+      next: Channel
+  ): ClientCall[ReqT, RespT] =
     new StatusClientInterceptor.CustomClientCall(next.newCall(method, callOptions))
-  }
 }
 
 object StatusClientInterceptor {
@@ -27,22 +27,26 @@ object StatusClientInterceptor {
   val GrpcKind = "client"
 
   /**
-   * Custom call wrapper that will hook in our custom listener to log returned status codes
-   * @param call client call to be wrapped
-   */
-  class CustomClientCall[T, U](call: ClientCall[T, U]) extends SimpleForwardingClientCall[T, U](call) {
-    override def start(responseListener: ClientCall.Listener[U], headers: Metadata): Unit = {
+    * Custom call wrapper that will hook in our custom listener to log returned status codes
+    * @param call
+    *   client call to be wrapped
+    */
+  class CustomClientCall[T, U](call: ClientCall[T, U])
+      extends SimpleForwardingClientCall[T, U](call) {
+    override def start(responseListener: ClientCall.Listener[U], headers: Metadata): Unit =
       super.start(new CustomListener(responseListener), headers)
-    }
   }
 
-  class CustomListener[U](listener: ClientCall.Listener[U]) extends SimpleForwardingClientCallListener[U](listener) {
+  class CustomListener[U](listener: ClientCall.Listener[U])
+      extends SimpleForwardingClientCallListener[U](listener) {
 
     /**
-     * Custom close logic that reports the status code
-     * @param status gRPC status code for the closed call
-     * @param trailers metadata used in the call
-     */
+      * Custom close logic that reports the status code
+      * @param status
+      *   gRPC status code for the closed call
+      * @param trailers
+      *   metadata used in the call
+      */
     override def onClose(status: Status, trailers: Metadata): Unit = {
       Span
         .current()

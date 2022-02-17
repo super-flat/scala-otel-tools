@@ -27,12 +27,14 @@ import scala.util.Try
 class StatusClientInterceptorSpec extends BaseSpec {
 
   var testExporter: InMemorySpanExporter = _
-  var openTelemetry: OpenTelemetry = _
+  var openTelemetry: OpenTelemetry       = _
 
   override def beforeEach(): Unit = {
     testExporter = InMemorySpanExporter.create
     openTelemetry = OpenTelemetrySdk.builder
-      .setTracerProvider(SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build)
+      .setTracerProvider(
+        SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build
+      )
       .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance))
       .build()
   }
@@ -40,16 +42,22 @@ class StatusClientInterceptorSpec extends BaseSpec {
   "interceptor" should {
     "add gRPC status code to span" in {
       // create a mock server that returns an error status
-      val serverName: String = InProcessServerBuilder.generateName
+      val serverName: String   = InProcessServerBuilder.generateName
       val serviceImpl: Greeter = mock[Greeter]
-      val errStatus = Status.NOT_FOUND.withDescription("not found")
-      val err: Throwable = errStatus.asException()
+      val errStatus            = Status.NOT_FOUND.withDescription("not found")
+      val err: Throwable       = errStatus.asException()
       (serviceImpl.sayHello _).expects(*).returning(Future.failed(err))
 
       val service: ServerServiceDefinition = Greeter.bindService(serviceImpl, global)
 
       closeables.register(
-        InProcessServerBuilder.forName(serverName).directExecutor().addService(service).build().start())
+        InProcessServerBuilder
+          .forName(serverName)
+          .directExecutor()
+          .addService(service)
+          .build()
+          .start()
+      )
 
       // create generic opentelemetry gRPC interceptor
       val grpcInterceptor = GrpcTracing.create(openTelemetry).newClientInterceptor()
@@ -86,14 +94,17 @@ class StatusClientInterceptorSpec extends BaseSpec {
       await()
         .atMost(10, TimeUnit.SECONDS)
         .until(() =>
-          testExporter.getFinishedSpanItems.asScala.exists(_.getParentSpanId == span.getSpanContext.getSpanId))
+          testExporter.getFinishedSpanItems.asScala
+            .exists(_.getParentSpanId == span.getSpanContext.getSpanId)
+        )
 
       val spans: List[SpanData] = testExporter.getFinishedSpanItems.asScala.toList
 
       val attributeData: Attributes =
         spans.find(_.getParentSpanId == span.getSpanContext.getSpanId).map(_.getAttributes).get
       attributeData.get(AttributeKey.stringKey("grpc.kind")) shouldBe "client"
-      attributeData.get(AttributeKey.stringKey("grpc.status_code")) shouldBe errStatus.getCode.name()
+      attributeData.get(AttributeKey.stringKey("grpc.status_code")) shouldBe errStatus.getCode
+        .name()
       attributeData.get(AttributeKey.stringKey("grpc.ok")) shouldBe "false"
 
     }

@@ -10,7 +10,8 @@ import io.superflat.otel.mixins.BaseSpec
 
 class TracingHelpersSpec extends BaseSpec {
 
-  val propagators: ContextPropagators = ContextPropagators.create(B3Propagator.injectingMultiHeaders())
+  val propagators: ContextPropagators =
+    ContextPropagators.create(B3Propagator.injectingMultiHeaders())
   val ot: OpenTelemetry = OpenTelemetrySdk.builder().setPropagators(propagators).build()
 
   GlobalOpenTelemetry.resetForTest()
@@ -34,11 +35,12 @@ class TracingHelpersSpec extends BaseSpec {
   }
   ".getParentSpanContext" should {
     "return a span context given the headers" in {
-      val spanID = "1111111111111111"
+      val spanID  = "1111111111111111"
       val traceID = "00000000000000002222222222222222"
-      val headers: Map[String, String] = Map("X-B3-SpanId" -> spanID, "X-B3-TraceId" -> traceID, "X-B3-SAMPLED" -> "1")
+      val headers: Map[String, String] =
+        Map("X-B3-SpanId" -> spanID, "X-B3-TraceId" -> traceID, "X-B3-SAMPLED" -> "1")
       val actual = TracingHelpers.getParentSpanContext(Context.current(), headers)
-      val span = Span.fromContext(actual)
+      val span   = Span.fromContext(actual)
       span.getSpanContext.getSpanId shouldBe spanID
       span.getSpanContext.getTraceId shouldBe traceID
     }

@@ -22,17 +22,15 @@ class GrpcHeadersInterceptorSpec extends BaseSpec {
   "header interceptor" should {
     "catch the headers" in {
       // Generate a unique in-process server name.
-      val serverName: String = InProcessServerBuilder.generateName
+      val serverName: String   = InProcessServerBuilder.generateName
       val serviceImpl: Greeter = mock[Greeter]
 
       // declare a variable and interceptor to capture the headers
       var responseHeaders: Option[Metadata] = None
 
       (serviceImpl.sayHello _).expects(*).onCall { hello: HelloRequest =>
-        {
-          responseHeaders = Option(GrpcHeadersInterceptor.REQUEST_META.get())
-          Future.successful(HelloReply().withMessage(hello.name))
-        }
+        responseHeaders = Option(GrpcHeadersInterceptor.REQUEST_META.get())
+        Future.successful(HelloReply().withMessage(hello.name))
       }
 
       val service: ServerServiceDefinition = GreeterGrpc.bindService(serviceImpl, global)
@@ -44,18 +42,21 @@ class GrpcHeadersInterceptorSpec extends BaseSpec {
           .addService(service)
           .intercept(GrpcHeadersInterceptor)
           .build()
-          .start())
+          .start()
+      )
 
       val channel: ManagedChannel =
         closeables.register(InProcessChannelBuilder.forName(serverName).directExecutor().build())
 
       val stub: GreeterBlockingStub = GreeterGrpc.blockingStub(channel)
 
-      val key = "x-custom-header"
-      val value = "value"
+      val key                      = "x-custom-header"
+      val value                    = "value"
       val requestHeaders: Metadata = getHeaders((key, value))
 
-      stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(requestHeaders)).sayHello(HelloRequest("hi"))
+      stub
+        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(requestHeaders))
+        .sayHello(HelloRequest("hi"))
 
       responseHeaders.isDefined shouldBe true
       GrpcHelpers.getStringHeader(responseHeaders.get, key) shouldBe value
