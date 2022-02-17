@@ -24,25 +24,27 @@ import scala.util.Try
 class StatusServerInterceptorSpec extends BaseSpec {
 
   var testExporter: InMemorySpanExporter = _
-  var openTelemetry: OpenTelemetry = _
+  var openTelemetry: OpenTelemetry       = _
 
   override def beforeEach(): Unit = {
     testExporter = InMemorySpanExporter.create
     openTelemetry = OpenTelemetrySdk.builder
-      .setTracerProvider(SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build)
+      .setTracerProvider(
+        SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build
+      )
       .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance))
       .build()
   }
 
   "interceptor" should {
     "add gRPC status code to span" in {
-      val serverName: String = InProcessServerBuilder.generateName
+      val serverName: String   = InProcessServerBuilder.generateName
       val serviceImpl: Greeter = mock[Greeter]
-      val err: Throwable = Status.PERMISSION_DENIED.withDescription("forbidden").asException()
+      val err: Throwable       = Status.PERMISSION_DENIED.withDescription("forbidden").asException()
       (serviceImpl.sayHello _).expects(*).returning(Future.failed(err))
 
       val service: ServerServiceDefinition = Greeter.bindService(serviceImpl, global)
-      val statusInterceptor = new StatusServerInterceptor()
+      val statusInterceptor                = new StatusServerInterceptor()
 
       closeables.register(
         InProcessServerBuilder
@@ -52,7 +54,8 @@ class StatusServerInterceptorSpec extends BaseSpec {
           .intercept(GrpcTracing.create(openTelemetry).newServerInterceptor())
           .intercept(statusInterceptor)
           .build()
-          .start())
+          .start()
+      )
 
       val channel: ManagedChannel =
         InProcessChannelBuilder.forName(serverName).directExecutor().build()

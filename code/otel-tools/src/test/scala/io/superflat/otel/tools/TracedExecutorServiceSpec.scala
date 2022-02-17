@@ -20,18 +20,21 @@ import scala.jdk.CollectionConverters._
 class TracedExecutorServiceSpec extends BaseSpec {
   // create test OT and exporter that reset for each test
   var testExporter: InMemorySpanExporter = _
-  var openTelemetry: OpenTelemetry = _
+  var openTelemetry: OpenTelemetry       = _
 
   // reset test OT between tests
   override def beforeEach(): Unit = {
     super.beforeEach()
-    val propagators: ContextPropagators = ContextPropagators.create(B3Propagator.injectingMultiHeaders())
+    val propagators: ContextPropagators =
+      ContextPropagators.create(B3Propagator.injectingMultiHeaders())
     // create a fresh in-mem test exporter
     testExporter = InMemorySpanExporter.create
     // create a trace provider from it
-    val traceProvider = SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build
+    val traceProvider =
+      SdkTracerProvider.builder.addSpanProcessor(SimpleSpanProcessor.create(testExporter)).build
     // instantiate OT sdk using in-mem provider
-    openTelemetry = OpenTelemetrySdk.builder.setTracerProvider(traceProvider).setPropagators(propagators).build()
+    openTelemetry =
+      OpenTelemetrySdk.builder.setTracerProvider(traceProvider).setPropagators(propagators).build()
   }
 
   "future callables" should {
@@ -40,8 +43,8 @@ class TracedExecutorServiceSpec extends BaseSpec {
       implicit val ec: ExecutionContext = TracedExecutorService.get()
       // create a tracer, span, and scope
       val tracer: Tracer = openTelemetry.getTracer("parent tracer")
-      val parentSpan = tracer.spanBuilder("outer span").startSpan()
-      val parentScope = parentSpan.makeCurrent()
+      val parentSpan     = tracer.spanBuilder("outer span").startSpan()
+      val parentScope    = parentSpan.makeCurrent()
       // track spans
       val childSpans = new mutable.ListBuffer[Span]()
       // create child spans in a future
@@ -49,11 +52,11 @@ class TracedExecutorServiceSpec extends BaseSpec {
         val childSpan = tracer.spanBuilder("child span 1").startSpan()
         childSpans.addOne(childSpan)
         childSpan.end()
-      }.map(_ => {
+      }.map { _ =>
         val childSpan = tracer.spanBuilder("child span 2").startSpan()
         childSpans.addOne(childSpan)
         childSpan.end()
-      })
+      }
       // end the parent scope & span
       parentScope.close()
       parentSpan.end()
@@ -68,12 +71,12 @@ class TracedExecutorServiceSpec extends BaseSpec {
     }
     "not trace when using a normal execution context" in {
       // create a normal EC
-      val threadPool = Executors.newFixedThreadPool(1)
+      val threadPool                            = Executors.newFixedThreadPool(1)
       implicit val ec: ExecutionContextExecutor = ExecutionContext.fromExecutor(threadPool)
       // create a tracer, span, and scope
       val tracer: Tracer = openTelemetry.getTracer("parent tracer")
-      val parentSpan = tracer.spanBuilder("outer span").startSpan()
-      val parentScope = parentSpan.makeCurrent()
+      val parentSpan     = tracer.spanBuilder("outer span").startSpan()
+      val parentScope    = parentSpan.makeCurrent()
       // track spans
       val childSpans = new mutable.ListBuffer[Span]()
       // create child spans in a future
@@ -81,11 +84,11 @@ class TracedExecutorServiceSpec extends BaseSpec {
         val childSpan = tracer.spanBuilder("child span 1").startSpan()
         childSpans.addOne(childSpan)
         childSpan.end()
-      }.map(_ => {
+      }.map { _ =>
         val childSpan = tracer.spanBuilder("child span 2").startSpan()
         childSpans.addOne(childSpan)
         childSpan.end()
-      })
+      }
       // end the parent scope & span
       parentScope.close()
       parentSpan.end()

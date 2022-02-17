@@ -8,10 +8,11 @@ import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
 
 /**
- * A custom Executor service that wraps all tasks it receives with the current telemetry context
- *  before handing the tasks off to underlying delegate executor.
- * @param delegate an executor service that will actually handle running the tasks.
- */
+  * A custom Executor service that wraps all tasks it receives with the current telemetry context
+  * before handing the tasks off to underlying delegate executor.
+  * @param delegate
+  *   an executor service that will actually handle running the tasks.
+  */
 class TracedExecutorService(delegate: ExecutorService) extends ExecutorService {
   override def shutdown(): Unit = delegate.shutdown()
 
@@ -21,7 +22,8 @@ class TracedExecutorService(delegate: ExecutorService) extends ExecutorService {
 
   override def isTerminated: Boolean = delegate.isTerminated
 
-  override def awaitTermination(timeout: Long, unit: TimeUnit): Boolean = delegate.awaitTermination(timeout, unit)
+  override def awaitTermination(timeout: Long, unit: TimeUnit): Boolean =
+    delegate.awaitTermination(timeout, unit)
 
   override def submit[T](task: Callable[T]): Future[T] = {
     val wrappedTask = Context.current().wrap(task)
@@ -46,7 +48,8 @@ class TracedExecutorService(delegate: ExecutorService) extends ExecutorService {
   override def invokeAll[T](
       tasks: util.Collection[_ <: Callable[T]],
       timeout: Long,
-      unit: TimeUnit): util.List[Future[T]] = {
+      unit: TimeUnit
+  ): util.List[Future[T]] = {
     val wrappedTask: Seq[Callable[T]] = tasks.asScala.map(t => Context.current().wrap(t)).toSeq
     delegate.invokeAll(wrappedTask.asJava, timeout, unit)
   }
@@ -56,7 +59,11 @@ class TracedExecutorService(delegate: ExecutorService) extends ExecutorService {
     delegate.invokeAny(wrappedTask.asJava)
   }
 
-  override def invokeAny[T](tasks: util.Collection[_ <: Callable[T]], timeout: Long, unit: TimeUnit): T = {
+  override def invokeAny[T](
+      tasks: util.Collection[_ <: Callable[T]],
+      timeout: Long,
+      unit: TimeUnit
+  ): T = {
     val wrappedTask: Seq[Callable[T]] = tasks.asScala.map(t => Context.current().wrap(t)).toSeq
     delegate.invokeAny(wrappedTask.asJava, timeout, unit)
   }
@@ -70,14 +77,15 @@ class TracedExecutorService(delegate: ExecutorService) extends ExecutorService {
 object TracedExecutorService {
 
   /**
-   * Returns an Execution Context created from a ForkJoinPool wrapped in a TracedExecutorService
-   * to ensure that tasks executed in the ForkJoinPool propagate the current telemetry Context.
-   */
+    * Returns an Execution Context created from a ForkJoinPool wrapped in a TracedExecutorService to
+    * ensure that tasks executed in the ForkJoinPool propagate the current telemetry Context.
+    */
   def get(threadMultiplier: Int = 10): ExecutionContext = {
     // compute parallelism as 10x the CPU cores
     val parallelism = Runtime.getRuntime.availableProcessors * threadMultiplier
     // create fork join pool
-    val pool: ForkJoinPool = new ForkJoinPool(parallelism, ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true)
+    val pool: ForkJoinPool =
+      new ForkJoinPool(parallelism, ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true)
     val tracedEc: ExecutorService = new TracedExecutorService(pool)
     ExecutionContext.fromExecutorService(tracedEc)
   }

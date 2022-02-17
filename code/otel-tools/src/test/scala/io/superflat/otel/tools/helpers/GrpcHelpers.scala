@@ -10,22 +10,21 @@ object GrpcHelpers {
 
   def getHeaders(headers: (String, String)*): Metadata = {
     val metadata: Metadata = new Metadata()
-    headers.foreach { case (k, v) =>
-      metadata.put(Metadata.Key.of(k, Metadata.ASCII_STRING_MARSHALLER), v)
+    headers.foreach {
+      case (k, v) =>
+        metadata.put(Metadata.Key.of(k, Metadata.ASCII_STRING_MARSHALLER), v)
     }
     metadata
   }
 
-  def getStringHeader(headers: Metadata, key: String): String = {
+  def getStringHeader(headers: Metadata, key: String): String =
     headers.get(Metadata.Key.of(key, Metadata.ASCII_STRING_MARSHALLER))
-  }
 
   class Closeables() {
     val resources: mutable.ListBuffer[Closeable] = mutable.ListBuffer.empty[Closeable]
 
-    def registerChannel(channel: ManagedChannel): ManagedChannel = {
+    def registerChannel(channel: ManagedChannel): ManagedChannel =
       register(channel)
-    }
 
     def register(channel: ManagedChannel): ManagedChannel = {
       val closeable: Closeable = () => {
