@@ -1,7 +1,7 @@
 package io.superflat.otel.tools
 
-import io.grpc.{ ManagedChannel, ServerServiceDefinition, Status }
 import io.grpc.inprocess.{ InProcessChannelBuilder, InProcessServerBuilder }
+import io.grpc.{ ManagedChannel, ServerServiceDefinition, Status }
 import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.common.{ AttributeKey, Attributes }
 import io.opentelemetry.api.trace.Span
@@ -14,8 +14,8 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.`export`.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.superflat.otel.mixins.BaseSpec
-import io.superflat.otel.tools.helloworld.{ GreeterGrpc, HelloReply, HelloRequest }
 import io.superflat.otel.tools.helloworld.GreeterGrpc.Greeter
+import io.superflat.otel.tools.helloworld.{ GreeterGrpc, HelloReply, HelloRequest }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

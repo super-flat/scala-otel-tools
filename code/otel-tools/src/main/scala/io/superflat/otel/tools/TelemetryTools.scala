@@ -4,13 +4,15 @@ import io.opentelemetry.api.common.{ Attributes, AttributesBuilder }
 import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
+import io.opentelemetry.sdk.metrics.`export`.IntervalMetricReader
 import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.metrics.SdkMeterProvider
-import io.opentelemetry.sdk.metrics.`export`.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
 import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.`export`.BatchSpanProcessor
 import io.opentelemetry.semconv.resource.attributes.ResourceAttributes
+
+import java.util.Collections
 
 case class TelemetryTools(telemetryConfig: TelemetryConfig) {
 
@@ -41,22 +43,17 @@ case class TelemetryTools(telemetryConfig: TelemetryConfig) {
   def configureMetricsExporter(resource: Resource): Unit = {
     val endpoint: String = telemetryConfig.otlpEndpoint
     if (endpoint.nonEmpty) {
-      // set up the metric exporter and wire it into the SDK and a timed periodic reader.
-      val metricExporter = OtlpGrpcMetricExporter.builder().setEndpoint(endpoint).build();
+      val meterProvider = SdkMeterProvider.builder.setResource(resource).buildAndRegisterGlobal
+      val builder       = OtlpGrpcMetricExporter.builder()
 
-      val periodicReaderFactory =
-        PeriodicMetricReader
-          .builder(metricExporter)
-          .newMetricReaderFactory();
-
-      val meterProvider =
-        SdkMeterProvider.builder
-          .setResource(resource)
-          .registerMetricReader(periodicReaderFactory)
-          .build()
-
+      builder.setEndpoint(endpoint)
+      val exporter = builder.build
+      val readerBuilder = IntervalMetricReader.builder
+        .setMetricProducers(Collections.singleton(meterProvider))
+        .setMetricExporter(exporter)
+      val reader = readerBuilder.build
       sys.addShutdownHook {
-        meterProvider.shutdown()
+        reader.shutdown()
       }
     }
   }
