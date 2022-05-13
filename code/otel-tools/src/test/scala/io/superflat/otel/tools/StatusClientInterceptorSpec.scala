@@ -63,7 +63,7 @@ class StatusClientInterceptorSpec extends BaseSpec {
       val grpcInterceptor = GrpcTracing.create(openTelemetry).newClientInterceptor()
 
       // create custom status client interceptor
-      val statusInterceptor = new StatusClientInterceptor()
+      val statusInterceptor = new StatusClientInterceptor
 
       // create
       val channel: ManagedChannel =

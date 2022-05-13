@@ -44,7 +44,7 @@ class StatusServerInterceptorSpec extends BaseSpec {
       (serviceImpl.sayHello _).expects(*).returning(Future.failed(err))
 
       val service: ServerServiceDefinition = Greeter.bindService(serviceImpl, global)
-      val statusInterceptor                = new StatusServerInterceptor()
+      val statusInterceptor                = new StatusServerInterceptor
 
       closeables.register(
         InProcessServerBuilder

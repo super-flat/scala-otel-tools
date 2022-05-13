@@ -37,7 +37,7 @@ object TracingHelpers {
     GlobalOpenTelemetry.getPropagators.getTextMapPropagator.inject(
       ctx,
       carrier,
-      new HashMapCarrier()
+      new HashMapCarrier
     )
     log.debug(s"Got Headers $carrier")
     carrier.toMap
@@ -58,7 +58,7 @@ object TracingHelpers {
     GlobalOpenTelemetry.getPropagators.getTextMapPropagator.extract(
       ctx,
       carrier,
-      new HashMapCarrier()
+      new HashMapCarrier
     )
   }
 }

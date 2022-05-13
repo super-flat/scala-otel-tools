@@ -24,7 +24,7 @@ trait BaseSpec
     PatienceConfig(timeout = Span(30, Seconds), interval = Span(100, org.scalatest.time.Millis))
 
   // define set of resources to close after each test
-  val closeables: GrpcHelpers.Closeables = new GrpcHelpers.Closeables()
+  val closeables: GrpcHelpers.Closeables = new GrpcHelpers.Closeables
 
   override protected def beforeAll(): Unit = {
     super.beforeAll()

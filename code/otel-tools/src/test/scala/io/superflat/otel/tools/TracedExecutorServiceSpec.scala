@@ -46,7 +46,7 @@ class TracedExecutorServiceSpec extends BaseSpec {
       val parentSpan     = tracer.spanBuilder("outer span").startSpan()
       val parentScope    = parentSpan.makeCurrent()
       // track spans
-      val childSpans = new mutable.ListBuffer[Span]()
+      val childSpans = new mutable.ListBuffer[Span]
       // create child spans in a future
       val future = Future {
         val childSpan = tracer.spanBuilder("child span 1").startSpan()
@@ -78,7 +78,7 @@ class TracedExecutorServiceSpec extends BaseSpec {
       val parentSpan     = tracer.spanBuilder("outer span").startSpan()
       val parentScope    = parentSpan.makeCurrent()
       // track spans
-      val childSpans = new mutable.ListBuffer[Span]()
+      val childSpans = new mutable.ListBuffer[Span]
       // create child spans in a future
       val future = Future {
         val childSpan = tracer.spanBuilder("child span 1").startSpan()
