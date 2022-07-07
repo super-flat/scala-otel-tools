@@ -1,9 +1,9 @@
-import sbt.{ plugins, AutoPlugin, Plugins }
+import sbt.{ AutoPlugin, Plugins, plugins }
 import sbt.Keys.{ dependencyOverrides, libraryDependencies }
 
 /**
- * Dependencies that will be used by any lagompb based project
- */
+  * Dependencies that will be used by any lagompb based project
+  */
 object BuildSettings extends AutoPlugin {
   override def requires: Plugins = plugins.JvmPlugin
 

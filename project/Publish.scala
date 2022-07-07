@@ -1,9 +1,9 @@
 import sbt.Keys.{ publishArtifact, skip, _ }
-import sbt.{ plugins, AutoPlugin, _ }
+import sbt.{ AutoPlugin, plugins, _ }
 
 /**
- * For projects that are not to be published.
- */
+  * For projects that are not to be published.
+  */
 object NoPublish extends AutoPlugin {
   override def requires: Plugins = plugins.JvmPlugin
 
