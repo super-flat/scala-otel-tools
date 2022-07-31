@@ -15,7 +15,7 @@ object Dependencies {
     val ScalaPbVersion: String  = scalapbVersion
 
     val Scala213: String         = "2.13.8"
-    val ScalaTestVersion: String = "3.2.11"
+    val ScalaTestVersion: String = "3.2.13"
     val ScalaMockVersion: String = "5.2.0"
 
     val OpenTelemetryVersion: String           = "1.6.0"
