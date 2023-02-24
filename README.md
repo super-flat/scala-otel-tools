@@ -1,6 +1,5 @@
 # otel-tools
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/super-flat/scala-otel-tools/publish.yml?branch=main&style=flat-square)](https://github.com/super-flat/scala-otel-tools/actions/workflows/publish.yml)
-
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13/badge.svg)]((https://maven-badges.herokuapp.com/maven-central/io.superflat/otel-tools_2.13))
 [![Snapshot Artifacts][Badge-SonatypeSnapshots]][Link-SonatypeSnapshots]
